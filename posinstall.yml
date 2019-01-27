@@ -1,7 +1,7 @@
 ---
 #Configuracao padrao do pool gamma.br
 - name: Configuracao de pos instalacao de novo servidor no pool
-  hosts: validacao
+  hosts: pdcsamba
   tasks:
    - name: Desabilitar a protecao de leitura /etc/resolv.conf
      command: "chattr -i /etc/resolv.conf"
@@ -11,6 +11,9 @@
 
    - name: Habilitar a protecao de leitura /etc/resolv.conf
      command: "chattr +i /etc/resolv.conf"
+
+   - name: Atualizar o inventario do pool
+     copy: src=modeloconfiguracao/inventario.txt dest=/tmp/inventario
 
    - name: Copiando arquivo /etc/motd
      copy: src=modeloconfiguracao/motd dest=/etc/motd
@@ -40,3 +43,10 @@
 
    - name: Copiar o arquivo para personalizar o vim
      copy: src=modeloconfiguracao/vimrc dest=/etc/vim/vimrc
+
+   - name: Tornar o vim o editor de texto padrao
+     alternatives:
+        name: editor
+        path: /usr/bin/vim.basic
+        link: /usr/bin/vim
+        priority: 30
