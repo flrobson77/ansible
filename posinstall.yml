@@ -3,29 +3,26 @@
 - name: Configuracao de pos instalacao de novo servidor no pool
   hosts: validacao
   tasks:
-   - name: copiando o arquivo de identificacao do pool
-     copy: src=hosts dest=/tmp
-    
    - name: Desabilitar a protecao de leitura /etc/resolv.conf
      command: "chattr -i /etc/resolv.conf"
 
    - name: Copiar o arquivo com DNS padrao da empresa
-     copy: src=resolv.conf dest=/etc/resolv.conf
+     copy: src=modeloconfiguracao/resolv.conf dest=/etc/resolv.conf
 
    - name: Habilitar a protecao de leitura /etc/resolv.conf
      command: "chattr +i /etc/resolv.conf"
 
    - name: Copiando arquivo /etc/motd
-     copy: src=motd dest=/etc/motd
+     copy: src=modeloconfiguracao/motd dest=/etc/motd
 
    - name: Copiando arquivo /etc/issue
-     copy: src=issue dest=/etc/issue
+     copy: src=modeloconfiguracao/issue dest=/etc/issue
 
    - name: Copiando arquivo /etc/issue.net
-     copy: src=issue.net dest=/etc/issue.net
+     copy: src=modeloconfiguracao/issue.net dest=/etc/issue.net
 
    - name: Copiando arquivo com repositorios do debian
-     copy: src=sources.list dest=/etc/apt/sources.list
+     copy: src=modeloconfiguracao/sources.list dest=/etc/apt/sources.list
 
    - name: atualizar o repositorio
      apt: update_cache=yes
@@ -41,8 +38,5 @@
       - tree
       - htop
 
-   - name: ajustar o vim para o editor padrão
-     alternatives:
-       name: vim
-       path: /usr/bin/vim.basic
-
+   - name: Copiar o arquivo para personalizar o vim
+     copy: src=modeloconfiguracao/vimrc dest=/etc/vim/vimrc
